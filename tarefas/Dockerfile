@@ -1,18 +1,25 @@
-# Usar a imagem base oficial do Python
-FROM python:3.12
+# Usa a imagem base do Python
+FROM python:3.8
 
-# Definir o diretório de trabalho no contêiner
-WORKDIR /tarefas
+# Define o diretório de trabalho dentro do contêiner
+WORKDIR /code
 
-# Copiar os arquivos de requisitos e instalá-los
-COPY requirements.txt /tarefas/
-RUN pip install --no-cache-dir -r requirements.txt
+# Copia o arquivo requirements.txt para o diretório de trabalho
+COPY requirements.txt .
 
-# Copiar o restante dos arquivos do projeto para o contêiner
-COPY . /tarefas/
+# Atualiza o pip e instala as dependências do projeto
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
 
-# Expor a porta padrão do Django
+# Copia todo o código fonte para o diretório de trabalho
+COPY . .
+
+# Expondo a porta 8000, onde o Django vai rodar
 EXPOSE 8000
 
-# Comando para iniciar o servidor de desenvolvimento do Django
-CMD ["python", "manage.py", "runserver", "127.0.0.1:8000"]
+# Comando para executar o servidor do Django
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+ENV DEBUG=1
+ENV SECRET_KEY=your_secret_key
+ENV DATABASE_URL=sqlite:///db.sqlite3

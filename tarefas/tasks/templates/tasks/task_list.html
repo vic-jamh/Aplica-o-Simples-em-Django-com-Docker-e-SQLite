@@ -4,18 +4,82 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciador de Tarefas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        button {
+            background-color: #000000;
+            color: #000000;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        li {
+            background-color: #f9f9f9;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <h1>Lista de tarefas</h1>
-    <a href="{% url 'task_create' %}">adicionar nova tarefa</a> 
-    <ul>
-        {% for task in tasks %}
-            <li>
-                {{ task.title }} - {% if task.status %} Concluida {% else %} Pendente {% endif %}
-                <a href="{% url 'task_update' task.pk %}">Editar</a>
-                <a href="{% url 'task_delete' task.pk %}">Deletar</a>
-            </li>
-        {% endfor %}
-    </ul>
+    <div class="container">
+        <h1>Lista de Tarefas</h1>
+               <ul>
+            {% for task in tasks %}
+                <li>
+                    {{ task.title }} - {% if task.status %} Concluída {% else %} Pendente {% endif %}
+                    <div>
+                        <a href="{% url 'task_update' task.pk %}">Editar</a>
+                        <a href="{% url 'task_delete' task.pk %}">Deletar</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    <button>
+        <a href="{% url 'task_create' %}">Adicionar Nova Tarefa</a>
+    </button>
+    </div>
 </body>
 </html>

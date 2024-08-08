@@ -1,26 +1,11 @@
 version: '3.8'
-
 services:
-  db:
-    image: postgres:13
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: teste
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: 12345
-
   web:
     build: .
-    command: ["python", "manage.py", "runserver", "127.0.0.1:8000"]
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/app
+      - .:/code
     ports:
       - "8000:8000"
-    depends_on:
-      - db
     environment:
-      - DATABASE_URL=postgres://user:minha_senha@db:12345/teste
-
-volumes:
-  postgres_data:
+      - DEBUG=1

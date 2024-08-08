@@ -3,15 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Tarefas</title>
+    <title>Gerenciador de Tarefas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            max-height: 150px;
+        }
+
+        .form-group select {
+            width: 100%;
+        }
+
+        .form-group button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+
+        .status-box {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            background-color: #e9ecef;
+            color: #495057;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .status-box.pending {
+            background-color: #ffc107;
+        }
+
+        .status-box.completed {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .task-list {
+            margin-top: 20px;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+
+        .task-item {
+            background-color: #fff;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #ddd;
+        }
+
+        .task-item a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .task-item a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <h1>Lista de tarefas</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Salvar</button>
-    </form>
-    <a href="{% url 'task_list' %}">Voltar para a lista de tarefas</a>
+    <div class="container">
+        <h1>Lista de Tarefas</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="title">Título</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Descrição</label>
+                <textarea id="description" name="description"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select id="status" name="status">
+                    <option value="pending" class="status-box pending">Pendente</option>
+                    <option value="completed" class="status-box completed">Concluída</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="submit">Criar Tarefa</button>
+            </div>
+        </form>
+            <ul>
+                {% for task in tasks %}
+                    <li class="task-item">
+                        {{ task.title }} - 
+                        <span class="status-box {% if task.status %}completed{% else %}pending{% endif %}">
+                            {% if task.status %} Concluída {% else %} Pendente {% endif %}
+                        </span>
+                        <div>
+                            <a href="{% url 'task_update' task.pk %}">Editar</a>
+                            <a href="{% url 'task_delete' task.pk %}">Deletar</a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 </body>
 </html>
